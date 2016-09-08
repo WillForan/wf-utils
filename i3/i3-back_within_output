@@ -59,6 +59,27 @@ sub updateLasts {
 
 };
 
+sub back_within_output {
+
+  my $output=shift;
+  # pop two off this output's queue
+  # put current back at the bottom
+  my $current = pop @{$ws_list{$output}};
+  my $goto    = pop @{$ws_list{$output}};
+  unshift @{$ws_list{$output}}, $current;
+  
+  
+  # maybe we dont have anywhere to go
+  return if !$goto; 
+
+  # if we're verbose, mention what we are doing
+  say "$current -> $goto.",
+      "$output queue is then @{$ws_list{$output}}"
+      if $VERBOSE;
+
+  $i3->message(TYPE_COMMAND, "workspace $goto");
+}
+
 
 
 ## subscribe to workspace changes: update curernt and previous workspaces
@@ -91,28 +112,14 @@ $i3->subscribe({
       # when we have the command we are waiting for
       # jump back
       if( $bind_cmd eq $i3_cmd_str){
-       $i3->get_outputs->cb(sub{
-          my @active = grep( $_->{current_workspace}  , @{(shift)->recv});
 
-          # TODO: remove all not 'primary' workspaces 
-          # when have access to second monitor
-          
-          # what output are we in
-          my $output = $active[0]->{name};
-
-          # pop two off this output's queue
-          # put current back at the bottom
-          my $current = pop @{$ws_list{$output}};
-          my $goto    = pop @{$ws_list{$output}};
-          unshift @{$ws_list{$output}}, $current;
-          
-          
-          # maybe we dont have anywhere to go
-          return if !$goto; 
-
-          say "$current -> $goto. $output queue is then @{$ws_list{$output}}" if $VERBOSE;
-          $i3->message(TYPE_COMMAND, "workspace $goto");
-
+       # we need to find what output is focused.
+       # do this by finding the window in all workspaces that is focused
+       # and getting the output that window is on
+       $i3->get_workspaces->cb(sub{
+         my @focused = grep( $_->{focused}, @{(shift)->recv});
+         my $output = $focused[0]->{output};
+         back_within_output $output;
        });
       }
     }
