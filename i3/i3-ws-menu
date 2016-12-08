@@ -9,7 +9,7 @@
 
 # get or set i3 command
 cmd="$@"
-[ -z $cmd ] && read junk cmd <<< $(echo -e "jp\nworkspace|mv\nmove container workspace|rename\nrename workspace to" | rofi -sep '|' -eh 2 -dmenu -p "action:")
+[ -z $cmd ] && cmd=$(echo -e "jp\nworkspace|mv\nmove container workspace|rename\nrename workspace to" | rofi -sep '|' -eh 2 -dmenu -p "action:"|sed 1d)
 [ -z "$cmd" ] && exit 
 
 echo $cmd

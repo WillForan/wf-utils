@@ -27,7 +27,7 @@ $i3->connect->recv or die "Error connecting to i3";
 # command string on bindsym to look for
 my $i3_cmd_str= 'nop back_within_output';
 
-my $VERBOSE   = 0;  # do we want to see whats happening?
+my $VERBOSE   = 1;  # do we want to see whats happening?
 my $n_prev_ws = 3;  # how many past workspaces are stored
 my %ws_list   = (); # prev and cur workspaces per output 
                     # queue ordered: (0) oldest -> (n_prev_ws) newest
