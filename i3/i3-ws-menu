@@ -6,11 +6,21 @@
 # $0 "rename workspace to"      # rename current
 # $0 "workspace"                # move to or create a new empty workspace (and go there)
 # $0 "move container workspace" # move current window to named space
+# $0 "move and go"              # move current window to named space and go there
 
 # get or set i3 command
 cmd="$@"
-[ -z $cmd ] && cmd=$(echo -e "jp\nworkspace|mv\nmove container workspace|rename\nrename workspace to" | rofi -sep '|' -eh 2 -dmenu -p "action:"|sed 1d)
+[ -z $cmd ] && cmd=$(echo -e "jp\nworkspace|mv\nmove container workspace|mvjp\nmv and go|rename\nrename workspace to" | rofi -sep '|' -eh 2 -dmenu -p "action:"|sed 1d)
 [ -z "$cmd" ] && exit 
 
-echo $cmd
-i3-msg $cmd $(i3-msg -t get_workspaces|jq  '.[].name'|rofi -dmenu -i -p "workspace:" )
+workspaces() { i3-msg -t get_workspaces|jq  '.[].name'|sort | rofi -dmenu -i -p "$1:"; }
+
+wsname=$(workspaces "$cmd")
+[ -z "$wsname" ] && exit 
+
+if [ "$cmd" == "mv and go" ]; then
+  i3-msg "move container workspace" "$wsname"
+  i3-msg "workspace" "$wsname"
+else
+  i3-msg "$cmd" "$wsname"
+fi
