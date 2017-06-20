@@ -1,7 +1,11 @@
 #!/bin/sh
 
+# create a dummy screen to use with x11vnc and a phone to get an extra (albeit small) display
+#
+
 # https://bbs.archlinux.org/viewtopic.php?id=191555
 # https://bitbucket.org/denilsonsa/small_scripts/src/default/screenlayout/create-virtual-modelines.sh
+# https://askubuntu.com/questions/410235/add-resolution-mode-for-xorg-dummy
 
 add_modeline() {
 	local modeline name
