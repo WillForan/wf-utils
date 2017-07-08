@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
-
-# Copyright 2010-2014 Jaap Karssenberg <jaap.karssenberg@gmail.com>
+# Will Foran 20170708
+# Adapted from QuickNote plugin (Jaap Karssenberg <jaap.karssenberg@gmail.com>)
 
 import sys
 import gtk
-
-
 
 import zim
 from zim.plugins import PluginClass
 from zim.main import GtkCommand
 from zim.notebook import resolve_notebook,get_notebook_list  # find notebook
 from zim.main import ZIM_APPLICATION       # launch page
-
 
 import logging
 logger = logging.getLogger('zim.plugins.quickjump')
@@ -40,7 +37,7 @@ class QuickJumpPluginCommand(GtkCommand):
 		self.opts['path']     = args[0]
 		if len(args) > 1: self.opts['notebook'] = args[1]
 
-        # when zim is running this is exectued in gtk.main  
+        # when zim is running this is executed in gtk.main  
         # so logging goes there and sys.exit will kill everything!
 	def run(self):
                 if 'notebook' in self.opts.keys():
