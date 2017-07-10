@@ -39,7 +39,11 @@ zimpath=$(findinnotebook $notebookdir | uritopath | menu )
 filepath=$notebookdir/$(echo $zimpath | pathtouri )
 [ ! -r "$filepath" ] && echo "$zimpath DNE as $filepath!?" && exit 1
 
-zim --plugin quickjump $zimpath $notebookname
+# go to zim window if we have it
+wmctrl -l|grep " - Zim$"| sed 1q | cut -f1 -d' '|xargs -r wmctrl -i -a
+# move zim to the page we reqested
+zim --plugin quickjump $zimpath $notebookname &
+# go to the desktop of the page we are editing
 $(dirname $0)/../i3/zim-i3-go.bash $zimpath $filepath
 
 
