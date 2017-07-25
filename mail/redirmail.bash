@@ -7,7 +7,7 @@ MAILDIR=$HOME/Maildir
 MAKEDIR="" # dont make directories that dont exist
 
 # usage: findmail from:foranw "disk usage"
-findmail(){ notmuch search --output=files $@ | grep "$MAILDIR/cur";}
+findmail(){ notmuch search --output=files $@ | grep "$MAILDIR/new";}
 
 movemail_() { xargs -r -I{} mv {} $1; }
 #findmail from:foranw disk\ usage | movemail_ ~/Maildir/LocalArchive/it/notifications/cur/
@@ -32,7 +32,8 @@ filterto(){
 mbsync -a
 notmuch new
 filterto "LocalArchive/it/notifications" from:foranw "disk usage"
-filterto "LocalArchive/mlists/all" to:mne_analysis 
-filterto "LocalArchive/it/netvault" "netvault: Job completed successfully"
-filterto "LocalArchive/upmc/spam" from:DailyExtra@upmc.edu 
+filterto "LocalArchive/mlists/all"       to:mne_analysis 
+filterto "LocalArchive/junk/all"         from:announcements@info.sagepub.co.uk
+filterto "LocalArchive/it/netvault"      "netvault: Job completed successfully"
+filterto "LocalArchive/upmc/spam"        from:DailyExtra@upmc.edu 
 notmuch new

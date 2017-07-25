@@ -46,6 +46,8 @@ part plain
 cat $tmp
 
 part html
-lowdown $tmp
+#lowdown $tmp
+grip $tmp --export -
+
 #echo "--$boundarycut"
 
