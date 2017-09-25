@@ -26,6 +26,7 @@ movemail(){
 filterto(){
  [ -z "$2" ] && echo "USAGE: filterto directory search terms" >&2 && return 1
  dest=$1; shift
+ notmuch tag +archive $@ 
  findmail $@ | movemail $dest
 }
 
