@@ -38,3 +38,4 @@ filterto "LocalArchive/junk/all"         from:announcements@info.sagepub.co.uk
 filterto "LocalArchive/it/netvault"      "netvault: Job completed successfully"
 filterto "LocalArchive/upmc/spam"        from:DailyExtra@upmc.edu 
 notmuch new
+notmuch tag +archive -- not tag:archive and from:cron 

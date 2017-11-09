@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # ideal for xkeybind, sxhkd, windows manager hot keys, etc
+GOTOZIMSCRIPTDIR=$(cd $(dirname $BASH_SOURCE);pwd)
 NOTEBOOKLISTFILE=~/.config/zim/notebooks.list 
 notebookDirAndName(){ 
   perl -F= -sne '
@@ -29,5 +30,5 @@ gotozim(){
   # move zim to the page we reqested
   zim --plugin quickjump $zimpath $notebookname &
   # go to the desktop of the page we are editing
-  $(dirname $0)/../i3/zim-i3-go.bash $zimpath $filepath
+  $GOTOZIMSCRIPTDIR/../i3/zim-i3-go.bash $zimpath $filepath
 }

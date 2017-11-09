@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 2017-07-17 - search for pidgin alias (assume focused window title) in notebook and jump to there
-
+! which rg >/dev/null && export PATH="$PATH:$HOME/.cargo/bin"
 source $(dirname $0)/quickjump_src.bash
 
 read notebookdir notebookname <<< $(getnotebook $1)
