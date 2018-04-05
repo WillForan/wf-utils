@@ -39,3 +39,15 @@ filterto "LocalArchive/it/netvault"      "netvault: Job completed successfully"
 filterto "LocalArchive/upmc/spam"        from:DailyExtra@upmc.edu 
 notmuch new
 notmuch tag +archive -- not tag:archive and from:cron 
+
+# search for 1 minute more than cron is set for (5min)
+# open in emacs, use i3 rule to focus on workspace
+nmf() { notmuch show --body=false --format=json $1 |jq -r '.[0]|.[0]|.[0].headers.From'|sed 's/".*" *//;s/[<>]//g'; }
+emacs_mail(){
+   # emacs -f NotMuch
+   emacsclient -c -a "" -eval  \
+      "(progn (setq frame-title-format \"NEWMAIL $(date +%FT%H:%M) $(nmf $1)\") (notmuch) (notmuch-show \"$1\") )"
+}
+mail_to_read(){ notmuch search --output=threads date:"6min..now" tag:unread -tag:archive &}
+export -f nmf emacs_mail
+mail_to_read | parallel -n1 emacs_mail {}
