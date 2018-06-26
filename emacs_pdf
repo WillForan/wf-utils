@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+emacsclient -c -a emacs  --eval "(progn (switch-to-buffer (find-file-noselect \"$1")) (pdf-tools-install) (pdf-view-mode) (blink-cursor-mode 0))"
