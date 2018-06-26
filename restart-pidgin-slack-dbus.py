@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 #
-# disable/enable slack account daily
+# disable/enable slack account
 #
 
 from pydbus

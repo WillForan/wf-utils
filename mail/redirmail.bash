@@ -45,9 +45,10 @@ notmuch tag +archive -- not tag:archive and from:cron
 nmf() { notmuch show --body=false --format=json $1 |jq -r '.[0]|.[0]|.[0].headers.From'|sed 's/".*" *//;s/[<>]//g'; }
 emacs_mail(){
    # emacs -f NotMuch
+   DISPLAY=:0 \
    emacsclient -c -a "" -eval  \
-      "(progn (setq frame-title-format \"NEWMAIL $(date +%FT%H:%M) $(nmf $1)\") (notmuch) (notmuch-show \"$1\") )"
+      "(progn (setq frame-title-format \"NEWMAIL $(date +%FT%H:%M) $(nmf $1)\") (notmuch) (flyspell-mode 1)  (notmuch-show \"$1\")  )"
 }
-mail_to_read(){ notmuch search --output=threads date:"6min..now" tag:unread -tag:archive &}
+mail_to_read(){ notmuch search --output=threads date:"6min..now" tag:unread -tag:archive; }
 export -f nmf emacs_mail
 mail_to_read | parallel -n1 emacs_mail {}
