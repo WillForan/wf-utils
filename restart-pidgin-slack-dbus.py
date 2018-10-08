@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 #
 # disable/enable slack account
 #
 
-from pydbus
+import pydbus
 import re
 
 bus = pydbus.SessionBus()

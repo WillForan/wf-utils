@@ -25,10 +25,21 @@ gotozim(){
   local zimpath="$1"; shift
   local notebookname="$1"; shift
   local filepath="$1"; shift
+  # still have argtuments, probalby dont want to jump
+  [ $# -ge 1 ] && i3jump=0 || i3jump=1
   # go to zim window if we have it
   wmctrl -l|grep " - Zim$"| sed 1q | cut -f1 -d' '|xargs -r wmctrl -i -a
   # move zim to the page we reqested
   zim --plugin quickjump $zimpath $notebookname &
   # go to the desktop of the page we are editing
-  $GOTOZIMSCRIPTDIR/../i3/zim-i3-go.bash $zimpath $filepath
+  [ $i3jump -eq 1 ] && $GOTOZIMSCRIPTDIR/../i3/zim-i3-go.bash $zimpath $filepath
+  return 0
+}
+
+findinnotebook() {
+  find -L $1 \
+    -iname '*txt' \
+    -not -iname '*-conflict-*' \
+    -not -iname '* conflicted copy *' \
+    -printf '%P\n'
 }

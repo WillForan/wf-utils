@@ -7,13 +7,6 @@
 
 source $(dirname $0)/quickjump_src.bash
 
-findinnotebook() {
-  find -L $1 \
-    -iname '*txt' \
-    -not -iname '*-conflict-*' \
-    -not -iname '* conflicted copy *' \
-    -printf '%P\n'
-}
 
 # either we give a notebook
 # or we take the first one in the .list file
