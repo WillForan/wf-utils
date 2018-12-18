@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# interactive z (fasd) with fzf
+# stolen from
+#  https://www.gregorykapfhammer.com/software/tool/productivity/2017/05/08/Directory-Zooming/
+_zf() {
+  fasdlist=$( fasd -d -l -r $1 | \
+    fzf --query="$1 " --select-1 --exit-0 --height=25% --reverse --tac --no-sort --cycle) &&
+    cd "$fasdlist"
+}
+
+# bind (alt+z) or run depending on context: 'zf' or 'source zf'
+[ "$(basename $0)" == zf ] && _zf $@ || bind '"\ez":"_zf\n"'
