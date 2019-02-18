@@ -2,8 +2,16 @@
 # -*- coding: utf-8 -*-
 
 #
-# send commands to jupytr kernel
+# send commands to jupyter kernel
 #
+
+# USAGE:
+#   echo 'a=1' | ./jpsnd      # send to most recent kernel
+#   echo 'a=1' | ./jpsnd 2289 # send to specific kernel
+# Find kernels:
+#   ls /run/user/$(id -u)/jupyter
+#   %connect_info
+
 
 import jupyter_client
 import sys
