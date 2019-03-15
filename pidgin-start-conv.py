@@ -18,24 +18,30 @@ for acc_id in purple.PurpleAccountsGetAllActive():
 
 buddies = {}
 for acc_id in accounts:
-    #if accounts[acc_id]['name'] != 'will@lncd.irc.slack.com': continue
+    accntname = accounts[acc_id]['name']
+
+    if re.match('.*lncd.slack.com', accntname):
+        buddies['RAs'] = {
+            'acc_id': acc_id,
+            'acc_nm': accntname,
+            'name': 'RAs',
+            'alias': 'RAs'}
     for buddy_id in purple.PurpleFindBuddies(acc_id, ''):
-        # using slack with irc, buddies are always offline 20170627
-        #if not purple.PurpleBuddyIsOnline(buddy_id):
-        #    continue
+        # only show online buddies. not useful for slack
+        # #if not purple.PurpleBuddyIsOnline(buddy_id):
+        # #    continue
 
         buddy_name = purple.PurpleBuddyGetName(buddy_id)
         buddy_alias = buddy_name[0:buddy_name.find('@')]
-        actual_alias=purple.PurpleBuddyGetAlias(buddy_id)
+        actual_alias = purple.PurpleBuddyGetAlias(buddy_id)
 
-        # most of google and facebook account
-        # dont skip slack.com accounts
-          #accounts[acc_id]['name'] != 'will@lncd.irc.slack.com' and \
-          #accounts[acc_id]['name'] != 'willforan@pittnerdlab.irc.slack.com' and \
-          #
-        accntname=accounts[acc_id]['name']
-        if not re.match('.*slack.com',accntname) and \
-           not buddy_alias in ['seeforan','emily.mente','roseforan22','0cevxsqzkayum2wigyufx8sda5']:
+        # restrict non slack to family
+        if not re.match('.*slack.com', accntname) and \
+           buddy_alias not in [
+                   'seeforan',
+                   'emily.mente',
+                   'roseforan22',
+                   '0cevxsqzkayum2wigyufx8sda5']:
             continue
 
         buddies[buddy_alias] = {
