@@ -12,20 +12,29 @@
 #   ls /run/user/$(id -u)/jupyter
 #   %connect_info
 
+# resources:
+#  https://blogs.aalto.fi/marijn/2017/11/13/integrating-vim-and-jupyter-qtconsole/
+#  https://stackoverflow.com/questions/9977446/connecting-to-a-remote-ipython-instance/35792945#35792945
+#  https://github.com/jupyter/jupyter_kernel_test/blob/master/jupyter_kernel_test/__init__.py
 
 import jupyter_client
+# from tornado.ioloop import IOLoop
 import sys
 
 if len(sys.argv) < 2:
     cf = jupyter_client.find_connection_file()
 else:
     cf = jupyter_client.find_connection_file(sys.argv[1])
-km = jupyter_client.BlockingKernelClient(connection_file=cf)
-km.load_connection_file()
+kc = jupyter_client.BlockingKernelClient(connection_file=cf)
+kc.load_connection_file()
 
 send = sys.stdin.read()
 if len(send) > 0:
-    km.execute(send)
+    msgs = []
+    f = kc.execute(send)
+    # kc.loop_client.add_handler(lambda x, y: msgs.append(x), 'iopub')
+    # r = IOLoop.current().run_sync(lambda: f, timeout=15)
+    # print(msgs)
 else:
     # TODO: paste from clipboard if nothing in pipe
     pass
