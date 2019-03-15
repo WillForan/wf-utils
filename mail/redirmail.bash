@@ -5,6 +5,7 @@
 
 MAILDIR=$HOME/Maildir
 MAKEDIR="" # dont make directories that dont exist
+DISPLAY=$(pgrep Xorg -a|sed 1q| perl -lne 'print $1 if m/tcp (:\d+)/')
 
 # usage: findmail from:foranw "disk usage"
 findmail(){ notmuch search --output=files $@ | grep "$MAILDIR/new";}
@@ -45,9 +46,10 @@ notmuch tag +archive -- not tag:archive and from:cron
 nmf() { notmuch show --body=false --format=json $1 |jq -r '.[0]|.[0]|.[0].headers.From'|sed 's/".*" *//;s/[<>]//g'; }
 emacs_mail(){
    # emacs -f NotMuch
-   DISPLAY=:0 \
-   emacsclient -c -a "" -eval  \
-      "(progn (setq frame-title-format \"NEWMAIL $(date +%FT%H:%M) $(nmf $1)\") (notmuch) (flyspell-mode 1)  (notmuch-show \"$1\")  )"
+   #emacsclient -c -a "" -eval  \
+   DISPLAY=$DISPLAY \
+   emacsclient -c -eval  \
+      "(progn    (notmuch-search \"$1 tag:unread\") (flyspell-mode 1) (notmuch-tree-from-search-current-query) (rename-buffer \"NEWMAIL $(date +%FT%H:%M=%s) $(nmf $1)\") (sleep-for 0 200) (notmuch-tree-show-message-in))"
 }
 mail_to_read(){ notmuch search --output=threads date:"6min..now" tag:unread -tag:archive; }
 export -f nmf emacs_mail
